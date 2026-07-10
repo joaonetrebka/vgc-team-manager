@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus Times - VGC Team Manager</title>
+</head>
+<body>
+    <h1>Times de {{ nome }}</h1>
+
+    {% if times %}
+        <ul>
+        {% for time in times %}
+            <li>{{ time[1] }} — {{ time[2] }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Você ainda não tem times. Crie o primeiro!</p>
+    {% endif %}
+
+    <a href="/logout">Sair</a>
+</body>
+</html>

@@ -52,6 +52,26 @@ def login():
         
     return render_template("login.html", mensagem="")
 
-#DEBUG   
+#ROTA LOGOUT
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+#ROTA TIMES
+@app.route("/times")
+def times():
+    if "id_usuario" not in session:
+        return redirect("/login")
+    
+    conexao = sqlite3.connect("vgc.db")
+    cursor = conexao.cursor()
+    cursor.execute("SELECT id, nome ,formato FROM times WHERE id_usuario = ?", (session["id_usuario"],))
+    lista_times = cursor.fetchall()
+    conexao.close()
+
+    return render_template("times.html", times = lista_times, nome = session["nome"])
+
+#DEBUG E RUNNING
 if __name__ == "__main__":
     app.run(debug=True)
