@@ -1,9 +1,12 @@
 from flask import Flask , render_template, request , session, redirect
 from werkzeug.security import generate_password_hash , check_password_hash
 import sqlite3
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
-app.secret_key = "therezinha"
+load_dotenv()
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/")
 def home():
