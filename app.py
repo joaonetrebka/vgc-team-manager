@@ -75,6 +75,25 @@ def times():
 
     return render_template("times.html", times = lista_times, nome = session["nome"])
 
+#ROTA CRIAR TIME
+@app.route("/times/novo", methods=["GET", "POST"])
+def novo_time():
+    if "id_usuario" not in session:
+        return redirect("/login")
+    
+    if request.method == "POST":
+        nome = request.form["nome"]
+        formato = request.form["formato"]
+
+        conexao = sqlite3.connect("vgc.db")
+        cursor = conexao.cursor()
+        cursor.execute("INSERT INTO times (nome, formato, id_usuario) VALUES (?, ?, ?)", (nome, formato, session["id_usuario"]))
+        conexao.commit()
+        conexao.close()
+        return redirect("/times")
+    
+    return render_template("novo_time.html")
+
 #DEBUG E RUNNING
 if __name__ == "__main__":
     app.run(debug=True)

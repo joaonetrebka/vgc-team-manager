@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Time - VGC Team Manager</title>
+</head>
+<body>
+    <h1>Criar novo time</h1>
+    <form method="POST" action="/times/novo">
+        <input type="text" name="nome" placeholder="Nome do time" required><br>
+        <select name="formato" required>
+            <option value="" disabled selected>Formato</option>
+            <option value="Reg M-B">Reg M-B</option>
+            <option value="Reg H">Reg H</option>
+            <option value="Reg G">Reg G</option>
+        </select><br>
+        <button type="submit">Criar</button>
+    </form>
+    <a href="/times">Voltar</a>
+</body>
+</html>
