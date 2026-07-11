@@ -10,7 +10,7 @@
     {% if times %}
         <ul>
         {% for time in times %}
-            <li>{{ time[1] }} — {{ time[2] }}</li>
+            <li><a href="/times/{{ time[0] }}">{{ time[1] }}</a> — {{ time[2] }}</li>
         {% endfor %}
         </ul>
     {% else %}
