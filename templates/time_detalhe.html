@@ -1,29 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>{{ time[1] }} - VGC Team Manager</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>{{ time[1] }} <small>({{ time[2] }})</small></h1>
     <p>{{ pokemons|length }}/6 Pokémon</p>
 
-    {% if pokemons %}
-        {% for p in pokemons %}
-            <div style="border: 1px solid #ccc; padding: 8px; margin: 8px 0;">
-                <strong>{{ p[1] }}</strong>
-                {% if p[2] %} @ {{ p[2] }}{% endif %}<br>
-                Habilidade: {{ p[3] }} | Natureza: {{ p[4] }} | Tera: {{ p[5] }}<br>
-                Golpes: {{ p[6] }} / {{ p[7] }} / {{ p[8] }} / {{ p[9] }}
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>Nenhum Pokémon ainda.</p>
-    {% endif %}
-
-    {% if pokemons|length < 6 %}
-        <a href="/times/{{ time[0] }}/pokemon/novo">+ Adicionar Pokémon</a><br>
+    {% if pokemons %} {% for p in pokemons %}
+    <div style="border: 1px solid #ccc; padding: 8px; margin: 8px 0">
+      <strong>{{ p[1] }}</strong>
+      {% if p[2] %} @ {{ p[2] }}{% endif %}<br />
+      Habilidade: {{ p[3] }} | Natureza: {{ p[4] }} | Tera: {{ p[5] }}<br />
+      Golpes: {{ p[6] }} / {{ p[7] }} / {{ p[8] }} / {{ p[9] }}
+      <form
+        method="POST"
+        action="/pokemon/{{ p[0] }}/excluir"
+        style="display: inline"
+        onsubmit="return confirm('Excluir {{ p[1] }} do time?');"
+      >
+        <button type="submit">Excluir</button>
+      </form>
+      <a href="/pokemon/{{ p[0] }}/editar">Editar</a>
+    </div>
+    {% endfor %} {% else %}
+    <p>Nenhum Pokémon ainda.</p>
+    {% endif %} {% if pokemons|length < 6 %}
+    <a href="/times/{{ time[0] }}/pokemon/novo">+ Adicionar Pokémon</a><br />
     {% endif %}
     <a href="/times">Voltar aos times</a>
-</body>
+    <form method="POST" action="/times/{{ time[0] }}/excluir"
+    onsubmit="return confirm('Excluir o time {{ time[1] }} inteiro?');">
+    <button type="submit">Excluir time</button>
+    </form>
+  </body>
 </html>

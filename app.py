@@ -179,6 +179,111 @@ def time_detalhe(id_time):
 
     return render_template("time_detalhe.html", time=time, pokemons=pokemons)
 
+#ROTA EXCLUIR POKEMON
+@app.route("/pokemon/<int:id_pokemon>/excluir", methods=["POST"])
+def excluir_pokemon(id_pokemon):
+    if "id_usuario" not in session:
+        return redirect("/login")
+    
+    conexao = sqlite3.connect("vgc.db")
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        """SELECT p.id_time FROM pokemons_do_time p
+           JOIN times t ON t.id = p.id_time
+           WHERE p.id = ? AND t.id_usuario = ?""",
+        (id_pokemon, session["id_usuario"])
+    )
+    resultado = cursor.fetchone()
+
+    if resultado:
+        cursor.execute("DELETE FROM pokemons_do_time WHERE id = ?", (id_pokemon,))
+        conexao.commit()
+        id_time = resultado[0]
+        conexao.close()
+        return redirect(f"/times/{id_time}")
+    
+    conexao.close()
+    return redirect("/times")
+
+#ROTA EXCLUIR TIME
+@app.route("/times/<int:id_time>/excluir", methods=["POST"])
+def excluir_time(id_time):
+    if "id_usuario" not in session:
+        return redirect("/login")
+    
+    conexao = sqlite3.connect("vgc.db")
+    cursor = conexao.cursor()
+
+    cursor.execute("SELECT id FROM times WHERE id = ? AND id_usuario = ?", (id_time, session["id_usuario"]))
+
+    if cursor.fetchone():
+        cursor.execute("DELETE FROM pokemons_do_time WHERE id_time = ?", (id_time,))
+        cursor.execute("DELETE FROM times WHERE id = ?", (id_time,))
+        conexao.commit()
+
+    conexao.close()
+    return redirect("/times")
+
+#ROTA EDITAR
+@app.route("/pokemon/<int:id_pokemon>/editar", methods=["GET", "POST"])
+def editar_pokemon(id_pokemon):
+    if "id_usuario" not in session:
+        return redirect("/login")
+    
+    conexao = sqlite3.connect("vgc.db")
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        """SELECT p.id, p.id_time, p.especie, p.item, p.habilidade,
+                  p.natureza, p.tera_type, p.golpe1, p.golpe2, p.golpe3, p.golpe4
+           FROM pokemons_do_time p
+           JOIN times t ON t.id = p.id_time
+           WHERE p.id = ? AND t.id_usuario = ?""",
+        (id_pokemon, session["id_usuario"])
+    )
+    pokemon = cursor.fetchone()
+    
+    if not pokemon:
+        conexao.close()
+        return redirect("/times")
+    
+    id_time = pokemon[1]
+
+    if request.method == "POST":
+        especie = request.form["especie"].strip()
+        item = request.form["item"].strip()
+
+        cursor.execute("SELECT especie, item FROM pokemons_do_time WHERE id_time = ? AND id != ?", (id_time, id_pokemon))
+        outros = cursor.fetchall()
+
+        erro = None
+        if especie.lower() in [p[0].lower() for p in outros]:
+            erro = f"Erro (species clause): {especie} ja está no time."
+        elif item and item.lower() in [p[1].lower() for p in outros if p[1]]:
+            erro = f"Erro (item clause): {item} ja está em uso no time."
+
+        if erro:
+            conexao.close()
+            return render_template("editar_pokemon.html", pokemon=pokemon, mensagem=erro)
+
+        cursor.execute(
+            """UPDATE pokemons_do_time
+               SET especie = ?, item = ?, habilidade = ?, natureza = ?,
+                   tera_type = ?, golpe1 = ?, golpe2 = ?, golpe3 = ?, golpe4 = ?
+               WHERE id = ?""",
+            (especie, item, request.form["habilidade"], request.form["natureza"],
+             request.form["tera_type"], request.form["golpe1"], request.form["golpe2"],
+             request.form["golpe3"], request.form["golpe4"], id_pokemon)
+        )
+        conexao.commit()
+        conexao.close()
+        return redirect(f"/times/{id_time}")   
+    
+    conexao.close()
+    return render_template("editar_pokemon.html", pokemon=pokemon, mensagem="")
+
+
 #DEBUG E RUNNING
 if __name__ == "__main__":
     app.run(debug=True)
