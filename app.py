@@ -10,7 +10,9 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/")
 def home():
-    return "VGC Team Manager is running!"
+    if "id_usuario" in session:
+        return redirect("/times")
+    return redirect("/login")
 
 #ROTA CADASTRO
 @app.route("/cadastro", methods=["GET", "POST"])

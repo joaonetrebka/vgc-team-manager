@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Adicionar Pokémon - VGC Team Manager</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block titulo %}Título da Página{% endblock %}
+
+{% block conteudo %}
     <h1>Adicionar Pokémon ao time {{ time[1] }}</h1>
 
-    <form method="POST">
+    <form method="POST" class="formulario">
         <input type="text" name="especie" placeholder="Espécie (ex: Incineroar)" required><br>
         <input type="text" name="item" placeholder="Item"><br>
         <input type="text" name="habilidade" placeholder="Habilidade"><br>
@@ -19,7 +17,6 @@
         <input type="text" name="golpe4" placeholder="Golpe 4"><br>
         <button type="submit">Adicionar</button>
     </form>
-    <p style="color: red;">{{ mensagem }}</p>
-    <a href="/times/{{ time[0] }}">Voltar</a>
-</body>
-</html>
+    <p class="mensagem">{{ mensagem }}</p>
+    <a href="/times/{{ time[0] }}" class="btn btn-secundario">Voltar</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}VGC Team Manager{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h2 class="logo"> VGC Team Manager</h2>
+        <nav>
+            {% if session.get("id_usuario") %}
+                <a href="/times">Meus times</a>
+                <a href="/logout">Sair</a>
+            {% else %}
+                <a href="/login">Entrar</a>
+                <a href="/cadastro">Cadastrar</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block conteudo %}{% endblock %}
+    </main>
+</body>
+</html>

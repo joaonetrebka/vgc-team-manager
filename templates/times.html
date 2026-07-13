@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Meus Times - VGC Team Manager</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block titulo %}Título da Página{% endblock %}
+
+{% block conteudo %}
     <h1>Times de {{ nome }}</h1>
 
     {% if times %}
@@ -16,7 +14,6 @@
     {% else %}
         <p>Você ainda não tem times. Crie o primeiro!</p>
     {% endif %}
-    <a href="/times/novo">+ Criar novo time</a>
-    <a href="/logout">Sair</a>
-</body>
-</html>
+    <a href="/times/novo" class="btn">+ Criar novo time</a>
+    <a href="/logout" class="btn btn-secundario">Sair</a>
+{% endblock %}

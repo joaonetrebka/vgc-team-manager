@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Novo Time - VGC Team Manager</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block titulo %}Título da Página{% endblock %}
+
+{% block conteudo %}
     <h1>Criar novo time</h1>
-    <form method="POST" action="/times/novo">
+    <form method="POST" action="/times/novo" class="formulario">
         <input type="text" name="nome" placeholder="Nome do time" required><br>
         <select name="formato" required>
             <option value="" disabled selected>Formato</option>
@@ -16,6 +14,5 @@
         </select><br>
         <button type="submit">Criar</button>
     </form>
-    <a href="/times">Voltar</a>
-</body>
-</html>
+    <a href="/times" class="btn btn-secundario">Voltar</a>
+{% endblock %}

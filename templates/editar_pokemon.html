@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Pokémon - VGC Team Manager</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block titulo %}Título da Página{% endblock %}
+
+{% block conteudo %}
     <h1>Editar {{ pokemon[2] }}</h1>
 
-    <form method="POST">
+    <form method="POST" class="formulario">
         <input type="text" name="especie" value="{{ pokemon[2] }}" required><br>
         <input type="text" name="item" value="{{ pokemon[3] }}" placeholder="Item"><br>
         <input type="text" name="habilidade" value="{{ pokemon[4] }}" placeholder="Habilidade"><br>
@@ -19,7 +17,6 @@
         <input type="text" name="golpe4" value="{{ pokemon[10] }}" placeholder="Golpe 4"><br>
         <button type="submit">Salvar</button>
     </form>
-    <p style="color: red;">{{ mensagem }}</p>
-    <a href="/times/{{ pokemon[1] }}">Cancelar</a>
-</body>
-</html>
+    <p class="mensagem">{{ mensagem }}</p>
+    <a href="/times/{{ pokemon[1] }}" class="btn btn-secundario">Cancelar</a>
+{% endblock %}

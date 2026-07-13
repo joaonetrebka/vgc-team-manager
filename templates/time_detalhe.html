@@ -1,15 +1,13 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>{{ time[1] }} - VGC Team Manager</title>
-  </head>
-  <body>
+{% extends "base.html" %}
+
+{% block titulo %}Título da Página{% endblock %}
+
+{% block conteudo %}
     <h1>{{ time[1] }} <small>({{ time[2] }})</small></h1>
     <p>{{ pokemons|length }}/6 Pokémon</p>
 
     {% if pokemons %} {% for p in pokemons %}
-    <div style="border: 1px solid #ccc; padding: 8px; margin: 8px 0">
+    <div class="pokemon-card">
       <strong>{{ p[1] }}</strong>
       {% if p[2] %} @ {{ p[2] }}{% endif %}<br />
       Habilidade: {{ p[3] }} | Natureza: {{ p[4] }} | Tera: {{ p[5] }}<br />
@@ -17,22 +15,20 @@
       <form
         method="POST"
         action="/pokemon/{{ p[0] }}/excluir"
-        style="display: inline"
         onsubmit="return confirm('Excluir {{ p[1] }} do time?');"
       >
-        <button type="submit">Excluir</button>
+        <button type="submit" class="btn-danger">Excluir</button>
       </form>
-      <a href="/pokemon/{{ p[0] }}/editar">Editar</a>
+      <a href="/pokemon/{{ p[0] }}/editar" class="btn-link">Editar</a>
     </div>
     {% endfor %} {% else %}
     <p>Nenhum Pokémon ainda.</p>
     {% endif %} {% if pokemons|length < 6 %}
-    <a href="/times/{{ time[0] }}/pokemon/novo">+ Adicionar Pokémon</a><br />
+    <a href="/times/{{ time[0] }}/pokemon/novo" class="btn">+ Adicionar Pokémon</a><br />
     {% endif %}
-    <a href="/times">Voltar aos times</a>
-    <form method="POST" action="/times/{{ time[0] }}/excluir"
+    <a href="/times" class="btn btn-secundario">Voltar aos times</a>
+    <form method="POST" action="/times/{{ time[0] }}/excluir" class="form-excluir-time"
     onsubmit="return confirm('Excluir o time {{ time[1] }} inteiro?');">
-    <button type="submit">Excluir time</button>
+    <button type="submit" class="btn-danger">Excluir time</button>
     </form>
-  </body>
-</html>
+{% endblock %}
